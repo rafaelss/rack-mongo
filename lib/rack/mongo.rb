@@ -11,6 +11,7 @@ module Rack
 
       options = { :host => "localhost", :port => 27017 }.merge(options)
       @db = ::Mongo::Connection.new(options[:host], options[:port]).db(options[:db])
+      @db.authenticate(options[:username], options[:password]) if options[:username] || options[:password]
     end
 
     def call(env)

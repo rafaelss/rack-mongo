@@ -29,6 +29,16 @@ describe Rack::Mongo do
 
       app(:host => "my.custom.host", :port => 9876)
     end
+
+    it "should authenticate if username and password is provided" do
+      db = mock("DB")
+      db.should_receive(:authenticate).with("foo", "bar")
+      connection = mock("Connection")
+      connection.should_receive(:db).with("test_db").and_return(db)
+      Mongo::Connection.should_receive(:new).with("localhost", 27017).and_return(connection)
+
+      app(:username => "foo", :password => "bar")
+    end
   end
 
   describe "POST /people" do
