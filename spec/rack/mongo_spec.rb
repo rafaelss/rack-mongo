@@ -61,5 +61,24 @@ describe Rack::Mongo do
       Yajl::Parser.parse(last_response.body).should == { '$oid' => "4e31f5a97cb7243591000002" }
     end
   end
+
+  describe "GET /people" do
+    before :each do
+      collection = mock("Collection")
+      collection.should_receive(:find).and_return([{ "_id" => BSON::ObjectId('4e31f5987cb7243591000001'), "first_name" => "Rafael", "last_name" => "Souza" }])
+      db = mock("DB")
+      db.should_receive(:collection).with("people").and_return(collection)
+      connection = mock("Connection")
+      connection.should_receive(:db).with("test_db").and_return(db)
+      Mongo::Connection.should_receive(:new).with("localhost", 27017).and_return(connection)
+    end
+
+    it "should return rows stored in people collection" do
+      get "/people"
+
+      last_response.status.should == 200
+      Yajl::Parser.parse(last_response.body).should == [ { "_id" => { "$oid" => "4e31f5987cb7243591000001" }, "first_name" => "Rafael", "last_name" => "Souza" } ]
+    end
+  end
 end
 

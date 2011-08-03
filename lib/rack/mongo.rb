@@ -17,9 +17,20 @@ module Rack
     def call(env)
       request = Rack::Request.new(env)
       collection_name = request.path_info.sub(/^\//, "")
-      object_id = @db.collection(collection_name).insert(request.params)
+      collection = @db.collection(collection_name)
 
-      [201, { "Content-Type" => "application/json" }, [ object_id.to_json ]]
+      if request.post?
+        object_id = collection.insert(request.params)
+        response(object_id, 201)
+      else
+        response(collection.find.to_a)
+      end
+    end
+
+    private
+
+    def response(data, status = 200)
+      [ status, { "Content-Type" => "application/json" }, [ Yajl::Encoder.encode(data) ] ]
     end
   end
 end
