@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Rack::Mongo::VERSION
   s.authors     = ["Rafael Souza"]
   s.email       = ["me@rafaelss.com"]
-  s.homepage    = ""
+  s.homepage    = "http://github.com/rafaelss/rack-mongo"
   s.summary     = %q{Save data into your mongo collections through a rack app}
   s.description = %q{Save data into your mongo collections through a rack app}
 
