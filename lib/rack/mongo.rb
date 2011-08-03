@@ -1,5 +1,6 @@
 require "rack/mongo/version"
 require "mongo"
+require "yajl"
 
 module Rack
   class Mongo
