@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "yajl-ruby", "~> 0.8.2"
   s.add_runtime_dependency "mongo", "~> 1.3.1"
   s.add_runtime_dependency "bson_ext", "~> 1.3.1"
+  s.add_runtime_dependency "addressable", "~> 2.2.6"
   s.add_development_dependency "rack-test", "~> 0.6.1"
   s.add_development_dependency "rspec", "~> 2.6.0"
 end

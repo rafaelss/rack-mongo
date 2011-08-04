@@ -1,6 +1,7 @@
 require "rack/mongo/version"
 require "mongo"
 require "yajl"
+require "addressable/uri"
 
 module Rack
   class Mongo
@@ -16,12 +17,13 @@ module Rack
     end
 
     def call(env)
-      request = Rack::Request.new(env)
-      collection_name = request.path_info.sub(/^\//, "")
+      collection_name = env["PATH_INFO"].to_s.sub(/^\//, "")
       collection = @db.collection(collection_name)
 
-      if request.post?
-        object_id = collection.insert(request.params)
+      if env["REQUEST_METHOD"] == "POST"
+        u = Addressable::URI.new
+        u.query = env["rack.input"].read
+        object_id = collection.insert(u.query_values)
         response(object_id, 201)
       else
         response(collection.find.to_a)
